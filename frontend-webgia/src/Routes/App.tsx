@@ -17,7 +17,7 @@ const AppRouter: React.FC = () => {
         <Route path="/NLP" element={<NLP />} />
         <Route path="/img-processing" element={<ImgProcess />} />
         <Route path="/LLM" element={<LLM />} />
-        <Route path="/comunity" element={<Community />} />
+        <Route path="/community" element={<Community />} />
         <Route path="/login" element={<Login />} />
       </Routes>
     </Router>

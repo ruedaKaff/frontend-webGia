@@ -8,6 +8,8 @@ import ImgProcess from "../components/imgProcess";
 import LLM from "../components/LLM";
 import Community from "../components/community";
 import Login from "../components/login";
+import Intermediate from "../components/intermediate";
+
 
 const AppRouter: React.FC = () => {
   return (
@@ -19,6 +21,7 @@ const AppRouter: React.FC = () => {
         <Route path="/LLM" element={<LLM />} />
         <Route path="/community" element={<Community />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/intermediate" element={<Intermediate/>} />
       </Routes>
     </Router>
   );

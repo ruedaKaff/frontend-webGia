@@ -11,8 +11,10 @@ const Intermediate: React.FC = () => {
     const userData = urlParams.get("user");
     if (userData) {
       const user: User = JSON.parse(decodeURIComponent(userData));
+      console.log(user);
+      
       localStorage.setItem("user", JSON.stringify(user));
-    }
+    } 
     navigate("/community");
   }, [navigate]);
 

@@ -9,7 +9,7 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 
 import { Link as RouterLink } from "react-router-dom";
-
+import PowerSettingsNewIcon from "@mui/icons-material/PowerSettingsNew";
 import HomeIcon from "@mui/icons-material/Home";
 import { useEffect, useState } from "react";
 import { User } from "../interfaces/user";
@@ -17,16 +17,47 @@ import { User } from "../interfaces/user";
 
 const NavBar: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  // Load user data from localStorage when the component mounts
   useEffect(() => {
-    const savedUser = localStorage.getItem("user");
-    if (savedUser) {
-      setUser(JSON.parse(savedUser));
-      
-      
-    }
+    fetch("http://localhost:9090/login/auth/session", {
+      credentials: "include",
+    })
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error("Not authenticated");
+        }
+      })
+      .then((data) => {
+        setUser(data.user);
+        setLoading(false);
+      })
+      .catch((error) => {
+        
+        setLoading(false);
+      });
   }, []);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+  const handleLogout = () => {
+    fetch("/auth/logout", { method: "POST", credentials: "include" })
+      .then(() => {
+        // After logging out, set the user state to null
+        setUser(null);
+      })
+      .catch((error) => console.error(error));
+  };
+  // Load user data from localStorage when the component mounts
+  // useEffect(() => {
+  //   const savedUser = localStorage.getItem("user");
+  //   if (savedUser) {
+  //     setUser(JSON.parse(savedUser));
+  //   }
+  // }, []);
 
   // window.alert("user = "+ user?.name);
 
@@ -68,45 +99,41 @@ const NavBar: React.FC = () => {
             alignItems="self-end"
             flexGrow={1}
           >
+            <RouterLink to="/community">
+              <Button
+                variant="outlined"
+                sx={{ bgcolor: "ActiveBorder", mr: 2, color: "ButtonFace" }}
+              >
+                Explorar
+              </Button>
+            </RouterLink>
             {user ? (
               <>
                 <img
                   src={user.picture}
                   alt={user.name}
-                  style={{ height: "50px", borderRadius: "50%" }}
+                  style={{ height: "40px", borderRadius: "50%" }}
                 />
                 <div>{user.name}!</div>
+
+                <Button
+                  variant="contained"
+                  sx={{ ml: 2 }}
+                  href="http://localhost:9090/login/auth/logout"
+                  onClick={handleLogout}
+                >
+                  <PowerSettingsNewIcon></PowerSettingsNewIcon>
+                </Button>
               </>
             ) : (
               <Button
                 variant="contained"
                 sx={{ bgcolor: "ActiveBorder", ml: 2 }}
-                href="http://localhost:9090/login/auth/google"
+                href="http://localhost:9090/login/auth/google?prompt=select_account"
               >
-                Ingreso
+                Login
               </Button>
             )}
-          
-            <Button
-              variant="contained"
-              sx={{ bgcolor: "ActiveBorder", ml: 2 }}
-              href="http://localhost:9090/login/auth/logout"
-              onClick={() => {
-                // Clear user data from localStorage
-                localStorage.removeItem("user");
-                setUser(null);
-              }}
-            >
-              Logout
-            </Button>
-            <RouterLink to="/community">
-              <Button
-                variant="outlined"
-                sx={{ bgcolor: "ActiveBorder", ml: 2, color: "ButtonFace" }}
-              >
-                Explorar
-              </Button>
-            </RouterLink>
           </Grid>
         </Box>
       </Toolbar>

@@ -10,14 +10,26 @@ import Typography from "@mui/material/Typography";
 
 import { Link as RouterLink } from "react-router-dom";
 import PowerSettingsNewIcon from "@mui/icons-material/PowerSettingsNew";
-import HomeIcon from "@mui/icons-material/Home";
 import { useEffect, useState } from "react";
 import { User } from "../interfaces/user";
+import Logo from "../assets/LogoWEBGIA.png";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
 // ...
 
 const NavBar: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   useEffect(() => {
     fetch("http://localhost:9090/login/auth/session", {
@@ -31,11 +43,12 @@ const NavBar: React.FC = () => {
         }
       })
       .then((data) => {
+        console.log(data.user.name);
+
         setUser(data.user);
         setLoading(false);
       })
       .catch((error) => {
-        
         setLoading(false);
       });
   }, []);
@@ -44,7 +57,7 @@ const NavBar: React.FC = () => {
     return <div>Loading...</div>;
   }
   const handleLogout = () => {
-    fetch("/auth/logout", { method: "POST", credentials: "include" })
+    fetch("http://localhost:9090/login/auth/logout", { credentials: "include" })
       .then(() => {
         // After logging out, set the user state to null
         setUser(null);
@@ -62,7 +75,7 @@ const NavBar: React.FC = () => {
   // window.alert("user = "+ user?.name);
 
   return (
-    <AppBar position="sticky">
+    <AppBar position="sticky" sx={{ bgcolor: "background.default" }}>
       <Toolbar>
         <Box
           sx={{ pt: 2, pb: 2, mx: 17 }}
@@ -73,7 +86,25 @@ const NavBar: React.FC = () => {
           flexGrow={1}
         >
           <RouterLink to="/">
-            <HomeIcon sx={{ mr: 2, fontSize: 40 }} />
+            <img
+              src={Logo}
+              alt="Logo"
+              style={{ width: "40px", minWidth: "40px" }}
+            />
+
+            {/* <HomeIcon sx={{ mr: 2, fontSize: 40 }} /> */}
+          </RouterLink>
+          <RouterLink to="/">
+            <Typography
+              sx={{
+                mx: 1,
+                fontWeight: "bold",
+                fontSize: "25px",
+                color: "text.primary",
+              }}
+            >
+              WEBGIA
+            </Typography>
           </RouterLink>
           <Grid
             sx={{ ml: 0 }}
@@ -83,15 +114,17 @@ const NavBar: React.FC = () => {
             justifyContent="center"
             alignItems="center"
           >
-            <RouterLink to="/NLP">
+            {/* <RouterLink to="/NLP">
               <Typography sx={{ mx: 1 }}>NLP</Typography>
-            </RouterLink>
+            </RouterLink> */}
             <RouterLink to="/img-processing">
-              <Typography sx={{ mx: 1 }}>IMAGE PROCESSING</Typography>
+              <Typography sx={{ mx: 1, color: "text.primary" }}>
+                IMAGE PROCESSING
+              </Typography>
             </RouterLink>
-            <RouterLink to="/LLM">
+            {/* <RouterLink to="/LLM">
               <Typography sx={{ mx: 1 }}>CHAT LLM</Typography>
-            </RouterLink>
+            </RouterLink> */}
           </Grid>
           <Grid
             display="flex"
@@ -101,34 +134,78 @@ const NavBar: React.FC = () => {
           >
             <RouterLink to="/community">
               <Button
-                variant="outlined"
-                sx={{ bgcolor: "ActiveBorder", mr: 2, color: "ButtonFace" }}
+                variant="text"
+                sx={{
+                  bgcolor: "secondary.main",
+                  mr: 2,
+                  color: "text.secondary",
+                  "&:hover": {
+                    backgroundColor: "#CD5C08",
+                  },
+                }}
               >
                 Explorar
               </Button>
             </RouterLink>
             {user ? (
-              <>
-                <img
-                  src={user.picture}
-                  alt={user.name}
-                  style={{ height: "40px", borderRadius: "50%" }}
-                />
-                <div>{user.name}!</div>
-
-                <Button
-                  variant="contained"
-                  sx={{ ml: 2 }}
-                  href="http://localhost:9090/login/auth/logout"
-                  onClick={handleLogout}
-                >
-                  <PowerSettingsNewIcon></PowerSettingsNewIcon>
+              <Box
+                sx={{
+                  p: 0.5, // padding
+                  bgcolor: "secondary.main",
+                  borderRadius: 2,
+                }}
+              >
+                <Button variant="text" onClick={handleClick}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Box sx={{ width: "34px", height: "34px" }}>
+                      <img
+                        src={user.picture}
+                        alt={user.name}
+                        style={{ height: "100%", borderRadius: "50%" }}
+                      />
+                    </Box>
+                    <Typography
+                      variant="caption"
+                      sx={{
+                        color: "text.secondary",
+                        mx: 1,
+                        textTransform: "none",
+                        whiteSpace: "nowrap",
+                      }}
+                    >
+                      {user.name}
+                    </Typography>
+                    <ArrowDropDownIcon sx={{ color: "text.primary" }} />
+                  </Box>
                 </Button>
-              </>
+                <Menu
+                  anchorEl={anchorEl}
+                  open={Boolean(anchorEl)}
+                  onClose={handleClose}
+                >
+                  <MenuItem onClick={handleLogout}>
+                    <PowerSettingsNewIcon sx={{ color: "text.secondary" }} />
+                    Logout
+                  </MenuItem>
+                  {/* Add more menu items here */}
+                </Menu>
+              </Box>
             ) : (
               <Button
-                variant="contained"
-                sx={{ bgcolor: "ActiveBorder", ml: 2 }}
+                variant="text"
+                sx={{
+                  bgcolor: "ActiveBorder",
+                  ml: 1,
+                  color: "text.secondary",
+                  "&:hover": {
+                    backgroundColor: "success.",
+                  },
+                }}
                 href="http://localhost:9090/login/auth/google?prompt=select_account"
               >
                 Login

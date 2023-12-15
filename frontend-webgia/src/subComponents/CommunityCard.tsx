@@ -9,6 +9,9 @@ import {
 } from "@mui/material";
 import { CommunityData } from "../interfaces/community";
 
+const capitalizeFirstLetter = (string: string) => {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+};
 const CommunityCard: React.FC<CommunityData> = ({
   id_community,
   input,
@@ -41,12 +44,12 @@ const CommunityCard: React.FC<CommunityData> = ({
       }
     />
     <CardContent sx={{ flexGrow: 1 }}>
-      <Typography gutterBottom variant="h5" component="h2">
-        {input}
+      <Typography gutterBottom variant="h5" component="h2" >
+        {capitalizeFirstLetter(input)}
       </Typography>
-      <Typography variant="body1">{username}</Typography>
-      <Typography variant="body2" color="#393E46">
-        {model_type}
+      <Typography variant="body1" >{capitalizeFirstLetter(username)}</Typography>
+      <Typography variant="body2" color="#393E46" >
+        {capitalizeFirstLetter(model_type)}
       </Typography>
     </CardContent>
 

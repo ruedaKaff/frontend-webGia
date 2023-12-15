@@ -1,29 +1,37 @@
-import { createTheme } from '@mui/material';
-import { red } from '@mui/material/colors';
+import { createTheme } from "@mui/material";
 
 const theme = createTheme({
-    palette: {
-        primary: {
-          main: '#556cd6',
-        },
-        secondary: {
-          main: '#19857b',
-        },
-        error: {
-          main: red.A400,
-        },
-        background: {
-          default: '#222831', // your background color
-        },
-      },
+  palette: {
+    primary: {
+      main:"#556cd6",
+    },
+    secondary: {
+      main: "#EF8D6E", // buttons background color
+    },
+    error: {
+      main: "#f44336",
+    },
+    success: {
+      main: "#59A593", // your new contrast color
+    },
+    background: {
+      default: "#FDF5ED", // background color
+      paper: "#FEF8F6", // font with light background color
+
+    },
+    text: {
+      primary: "#523B60", // primary font color
+      secondary: "#FEF8F6", // font with light background color
+    },
+  
+  },
   components: {
-    // Name of the component ⚛️
     MuiButtonBase: {
       defaultProps: {
-        // The props to apply
-        disableRipple: true, // No more ripple, on the whole application 💣!
+        disableRipple: true,
       },
     },
   },
 });
+
 export default theme;

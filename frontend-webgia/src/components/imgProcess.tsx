@@ -15,10 +15,10 @@ import { Grid } from "@mui/material";
 import { CircularProgress } from "@mui/material";
 import { Alert } from "@mui/material";
 import { CommunityPost } from "../interfaces/communityPost";
-import { User } from "../interfaces/user";
+import { useNavigate } from "react-router-dom";
 
 const ImgProcessing: React.FC = () => {
-  // const [user, setUser] = useState<User | null>(null);
+  const navigate = useNavigate();
   const [prompt, setPrompt] = useState("");
   const [image, setImage] = useState("");
   const [image64, setImage64] = useState("");
@@ -44,26 +44,23 @@ const ImgProcessing: React.FC = () => {
   const handleShare = async () => {
     try {
       console.log("checking http://localhost:9090/community ");
-  
+
       const User = await axios.get("http://localhost:9090/login/auth/session", {
         withCredentials: true,
       });
-  
+
       if (!User.data.user) {
         alert("You must be logged in to share an image");
         return;
       }
-  
+
       const { email, id, name } = User.data.user;
 
       if (!image64 || !prompt) {
         alert("Image or output is null");
         return;
       }
-      console.log("imagen data",image64);
-      
-  
-  
+
       const postData: CommunityPost = {
         email: email,
         input: prompt,
@@ -73,9 +70,7 @@ const ImgProcessing: React.FC = () => {
         user_id: id,
         username: name,
       };
-  
-      console.log(postData);
-  
+
       const response = await axios.post(
         "http://localhost:9090/community",
         postData,
@@ -83,9 +78,8 @@ const ImgProcessing: React.FC = () => {
           withCredentials: true,
         }
       );
-  
-      console.log(response.data);
-      // TODO: Handle the response data
+
+      navigate("/community");
     } catch (error) {
       console.error("An error occurred while sharing the image", error);
     }

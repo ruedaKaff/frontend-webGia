@@ -17,7 +17,7 @@ const Home: React.FC = () => {
       <main>
         <Box
           sx={{
-            bgcolor: "background.paper",
+            bgcolor: "text.secondary",
             mt: { xs: 1, sm: 2 },
             pt: { xs: 4, sm: 8 },
             pb: { xs: 5, sm: 10 },
@@ -28,10 +28,11 @@ const Home: React.FC = () => {
         >
           <Container maxWidth="sm" sx={{ pt: { xs: 5, sm: 10 } }}>
             <Typography
-              component="h1"
+        
               variant="h3"
               align="center"
               color="text.primary"
+              fontWeight="bold"
               gutterBottom
             >
               HOME
@@ -39,7 +40,7 @@ const Home: React.FC = () => {
             <Typography
               variant="inherit"
               align="center"
-              color="text.secondary"
+              color="text.primary"
               paragraph
             >
               Something short and leading about the collection below—its

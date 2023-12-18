@@ -9,21 +9,26 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 
 import { Link as RouterLink } from "react-router-dom";
-import PowerSettingsNewIcon from "@mui/icons-material/PowerSettingsNew";
+
 import { useEffect, useState } from "react";
 import { User } from "../interfaces/user";
 import Logo from "../assets/LogoWEBGIA.png";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import Menu from "@mui/material/Menu";
+import LogoutIcon from "@mui/icons-material/Logout";
+import LogingIcon from "@mui/icons-material/Login";
+import ExploreIcon from "@mui/icons-material/Explore";
+import EditIcon from "@mui/icons-material/Edit";
+import Hidden from "@mui/material/Hidden";
 import MenuItem from "@mui/material/MenuItem";
-// ...
 
 const NavBar: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleDropdown = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
 
@@ -43,8 +48,6 @@ const NavBar: React.FC = () => {
         }
       })
       .then((data) => {
-        console.log(data.user.name);
-
         setUser(data.user);
         setLoading(false);
       })
@@ -57,28 +60,14 @@ const NavBar: React.FC = () => {
     return <div>Loading...</div>;
   }
   const handleLogout = () => {
-    fetch("http://localhost:9090/login/auth/logout", { credentials: "include" })
-      .then(() => {
-        // After logging out, set the user state to null
-        setUser(null);
-      })
-      .catch((error) => console.error(error));
+    setUser(null);
   };
-  // Load user data from localStorage when the component mounts
-  // useEffect(() => {
-  //   const savedUser = localStorage.getItem("user");
-  //   if (savedUser) {
-  //     setUser(JSON.parse(savedUser));
-  //   }
-  // }, []);
-
-  // window.alert("user = "+ user?.name);
 
   return (
     <AppBar position="sticky" sx={{ bgcolor: "background.default" }}>
       <Toolbar>
         <Box
-          sx={{ pt: 2, pb: 2, mx: 17 }}
+          sx={{ pt: 2, pb: 2, mx: { xs: 2, sm: 5, md: 17 } }}
           display="flex"
           flexDirection="row"
           justifyContent="space-between"
@@ -113,19 +102,7 @@ const NavBar: React.FC = () => {
             spacing={2}
             justifyContent="center"
             alignItems="center"
-          >
-            {/* <RouterLink to="/NLP">
-              <Typography sx={{ mx: 1 }}>NLP</Typography>
-            </RouterLink> */}
-            <RouterLink to="/img-processing">
-              <Typography sx={{ mx: 1, color: "text.primary" }}>
-                IMAGE PROCESSING
-              </Typography>
-            </RouterLink>
-            {/* <RouterLink to="/LLM">
-              <Typography sx={{ mx: 1 }}>CHAT LLM</Typography>
-            </RouterLink> */}
-          </Grid>
+          ></Grid>
           <Grid
             display="flex"
             justifyContent="end"
@@ -134,10 +111,11 @@ const NavBar: React.FC = () => {
           >
             <RouterLink to="/community">
               <Button
-                variant="text"
+                endIcon={<ExploreIcon />}
                 sx={{
                   bgcolor: "secondary.main",
-                  mr: 2,
+                  px: "1.2vw",
+                  borderRadius: 3,
                   color: "text.secondary",
                   "&:hover": {
                     backgroundColor: "#CD5C08",
@@ -148,67 +126,106 @@ const NavBar: React.FC = () => {
               </Button>
             </RouterLink>
             {user ? (
+              // USER BUTTON LOGIC //////////////////////////////
               <Box
                 sx={{
-                  p: 0.5, // padding
-                  bgcolor: "secondary.main",
-                  borderRadius: 2,
+                  // padding
+                  bgcolor: "success.main",
+                  "&:hover": {
+                    backgroundColor: "#191919",
+                  },
+                  borderRadius: 3,
+                  ml: 1,
                 }}
               >
-                <Button variant="text" onClick={handleClick}>
+                {/* BUTTON DROPDOWN LOGIC---------------------/ */}
+                <Button variant="text" onClick={handleDropdown}>
                   <Box
                     sx={{
                       display: "flex",
                       alignItems: "center",
                     }}
                   >
-                    <Box sx={{ width: "34px", height: "34px" }}>
+                    <Box sx={{ width: "26px", height: "26px" }}>
                       <img
                         src={user.picture}
                         alt={user.name}
                         style={{ height: "100%", borderRadius: "50%" }}
                       />
                     </Box>
-                    <Typography
-                      variant="caption"
-                      sx={{
-                        color: "text.secondary",
-                        mx: 1,
-                        textTransform: "none",
-                        whiteSpace: "nowrap",
-                      }}
-                    >
-                      {user.name}
-                    </Typography>
-                    <ArrowDropDownIcon sx={{ color: "text.primary" }} />
+                    <Hidden smDown>
+                      <Typography
+                        variant="body2"
+                        sx={{
+                          color: "text.secondary",
+                          mx: 1,
+                          textTransform: "none",
+                          whiteSpace: "nowrap",
+                        }}
+                      >
+                        {user.name}
+                      </Typography>
+
+                      {anchorEl ? (
+                        <ArrowDropUpIcon sx={{ color: "text.secondary" }} />
+                      ) : (
+                        <ArrowDropDownIcon sx={{ color: "text.secondary" }} />
+                      )}
+                    </Hidden>
                   </Box>
                 </Button>
+
                 <Menu
                   anchorEl={anchorEl}
                   open={Boolean(anchorEl)}
                   onClose={handleClose}
+                  marginThreshold={73}
+                  anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+                  transformOrigin={{ vertical: "top", horizontal: "right" }}
+                  MenuListProps={{
+                    "aria-labelledby": "basic-button",
+                  }}
                 >
-                  <MenuItem onClick={handleLogout}>
-                    <PowerSettingsNewIcon sx={{ color: "text.secondary" }} />
-                    Logout
+                  <MenuItem>
+                    <Button>
+                      <Typography sx={{ color: "text.primary", p: 0.5 }}>
+                        Administrar
+                      </Typography>
+                      <EditIcon sx={{ color: "text.primary", ml: 2 }} />
+                    </Button>
+                  </MenuItem>
+                  <MenuItem>
+                    <Button
+                      href="http://localhost:9090/login/auth/logout"
+                      onClick={handleLogout}
+                    >
+                      <Typography sx={{ color: "text.primary", p: 0.5 }}>
+                        Cerrar sesión
+                      </Typography>
+                      <LogoutIcon sx={{ color: "text.primary", ml: 0.7 }} />
+                    </Button>
                   </MenuItem>
                   {/* Add more menu items here */}
                 </Menu>
               </Box>
             ) : (
               <Button
+                endIcon={<LogingIcon />}
                 variant="text"
                 sx={{
+                  px: "1.2vw",
+
                   bgcolor: "ActiveBorder",
                   ml: 1,
+                  borderRadius: 3,
                   color: "text.secondary",
                   "&:hover": {
-                    backgroundColor: "success.",
+                    backgroundColor: "success.main",
                   },
                 }}
                 href="http://localhost:9090/login/auth/google?prompt=select_account"
               >
-                Login
+                Ingresar
               </Button>
             )}
           </Grid>

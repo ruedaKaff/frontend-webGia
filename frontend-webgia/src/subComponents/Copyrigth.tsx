@@ -3,14 +3,16 @@ import Typography from "@mui/material/Typography";
 import Link from "@mui/material/Link";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
-import CameraIcon from "@mui/icons-material/Camera";
+import LinkedInIcon from "@mui/icons-material/LinkedIn";
+import GitHubIcon from "@mui/icons-material/GitHub";
+
 
 function CopyText() {
   return (
-    <Typography variant="subtitle2" align="left" color="#EEEEEE">
-      {"Copyright © "}
-      <Link color="#EEEEEE" href="https://github.com/ruedaKaff">
-        RuedaKaf
+    <Typography variant="subtitle2" align="left" color="text.primary">
+      {"Hecho por "}
+      <Link color="text.primary" href="https://github.com/ruedaKaff">
+        RuedaKaff
       </Link>{" "}
       {new Date().getFullYear()}
       {"."}
@@ -20,14 +22,13 @@ function CopyText() {
 
 function CopyText1() {
   return (
-    <Typography variant="subtitle2" color="#EEEEEE">
-      {"Social "}
-      <Link color="#EEEEEE" href="https://github.com/ruedaKaff">
-        <CameraIcon></CameraIcon>
-      </Link>{" "}
-      <Link color="#EEEEEE" href="https://github.com/ruedaKaff">
-        <CameraIcon></CameraIcon>
-      </Link>{" "}
+    <Typography variant="subtitle2" color="text.primary">
+      <Link color="text.primary" href="https://www.linkedin.com/in/ruedakaf/">
+        <LinkedInIcon />
+      </Link>
+      <Link sx={{ml:2}} color="text.primary" href="https://github.com/ruedaKaff">
+        <GitHubIcon />
+      </Link>
     </Typography>
   );
 }
@@ -35,11 +36,11 @@ function CopyText1() {
 const copyright: React.FC = () => {
   return (
     <Box
-      sx={{ bgcolor: "#112D4E", p: 2, mx: { xs: 2, sm: 20 }, mt: 0.5 }}
+      sx={{ bgcolor: "background.default", p: 2, mx: { xs: 2, sm: 20 }, mt: 0.5 }}
       maxWidth="lg"
       component="footer"
     >
-      <Grid container spacing={0} justifyContent="space-between">
+      <Grid container  justifyContent="space-between">
         <CopyText />
         <CopyText1 />
       </Grid>

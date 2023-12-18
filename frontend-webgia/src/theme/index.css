@@ -12,3 +12,6 @@ body {
     
     background-color: theme('colors.theme-background-default');
 }
+* {
+    text-transform: none !important;
+}

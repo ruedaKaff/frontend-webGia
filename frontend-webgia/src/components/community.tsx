@@ -74,7 +74,7 @@ const Community: React.FC = () => {
               <Typography
                 variant="inherit"
                 align="center"
-                color="text.secondary"
+                color="text.primary"
                 paragraph
               >
                 Something short and leading about the collection below—its
@@ -87,7 +87,7 @@ const Community: React.FC = () => {
                 spacing={2}
                 justifyContent="center"
               >
-                <Button variant="contained">Comparte tus creaciones</Button>
+                <Button sx={{}} variant="contained">Comparte tus creaciones</Button>
                 <Button variant="outlined">Prueba IA</Button>
               </Stack>
             </Container>

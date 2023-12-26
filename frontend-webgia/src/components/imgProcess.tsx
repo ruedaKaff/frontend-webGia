@@ -16,6 +16,8 @@ import { CircularProgress } from "@mui/material";
 import { Alert } from "@mui/material";
 import { CommunityPost } from "../interfaces/communityPost";
 import { useNavigate } from "react-router-dom";
+import ChatIcon from "@mui/icons-material/Chat";
+import img4 from "../assets/img4.jpg";
 
 const ImgProcessing: React.FC = () => {
   const navigate = useNavigate();
@@ -98,71 +100,99 @@ const ImgProcessing: React.FC = () => {
         <main>
           <Box
             sx={{
-              bgcolor: "background.paper",
-              mt: { xs: 1, sm: 2 },
+              position: "relative",
+              mt: { xs: 1, sm: 1 },
               pt: { xs: 4, sm: 4 },
               pb: { xs: 5, sm: 4 },
               mx: { xs: 2, sm: 20 },
-              borderRadius: 1,
+              borderRadius: 3,
+
+              opacity: 1,
+              "&::before": {
+                content: '""',
+                position: "absolute",
+                top: 0,
+                right: 0,
+                bottom: 0,
+                left: 0,
+                backgroundSize: "cover",
+                backgroundRepeat: "no-repeat",
+                backgroundImage: `url(${img4})`,
+                opacity: 0.1,
+
+                zIndex: -1,
+              },
             }}
             justifyContent="center"
             alignItems="center"
           >
-            <Container maxWidth="sm" sx={{ pt: { xs: 5, sm: 10 } }}>
+            <Container sx={{ mt: 16, pt: { xs: 5, sm: 20 } }}>
               <Typography
                 component="h1"
                 variant="h3"
-                align="center"
+                align="left"
                 color="text.primary"
                 gutterBottom
               >
-                Image processing service
+                Computer Vision
               </Typography>
               <Typography
                 variant="inherit"
-                align="center"
-                color="text.secondary"
+                align="left"
+                color="text.primary"
                 paragraph
               >
-                Something short and leading about the collection below—its
-                contents, the creator, etc. Make it short and sweet, but not too
-                short.
+                Computer Vision es un campo de la inteligencia artificial que
+                capacita a los ordenadores para interpretar y comprender el
+                mundo visual. Mediante el uso de imágenes digitales de cámaras y
+                vídeos y modelos de aprendizaje profundo, las máquinas pueden
+                identificar y clasificar objetos con precisión y, a
+                continuación, reaccionar ante lo que "ven ".
               </Typography>
               <Stack
-                sx={{ pt: 4 }}
+                sx={{ pt:1}}
                 direction="row"
                 spacing={2}
-                justifyContent="center"
+                justifyContent="left"
               >
-                <Button variant="contained">Comparte tus creaciones</Button>
-                <Button variant="outlined">Prueba + IA</Button>
+                <Button
+                  sx={{
+                    bgcolor: "secondary.main",
+                    px: "1.2vw",
+                    borderRadius: 3,
+                    color: "text.secondary",
+                    "&:hover": {
+                      backgroundColor: "#CD5C08",
+                    },
+                  }}
+                >
+                  Conoce +
+                </Button>
               </Stack>
             </Container>
           </Box>
           <Box
             sx={{
-              bgcolor: "background.paper",
-              mt: { xs: 1, sm: 2 },
-              pt: { xs: 4, sm: 8 },
+              mt: { xs: 1, sm: 1 },
+              pt: { xs: 4, sm: 2 },
               pb: { xs: 5, sm: 10 },
               mx: { xs: 2, sm: 20 },
             }}
             justifyContent="center"
             alignItems="center"
           >
-            <Container sx={{ py: 8 }} maxWidth="lg">
+            <Container sx={{ py: 2 }} maxWidth="lg">
               <Grid container spacing={2}>
                 <Grid
                   item
                   xs={12}
                   md={6}
-                  bgcolor="primary.main"
+                  bgcolor="background.default"
                   borderRadius={2}
                 >
                   <Box>
-                    <Typography variant="h6" color="white">
-                      Prueba imagen generativa aqui:
-                    </Typography>
+                    
+                    <Typography variant="h6" color="text.primary">Generacion de imagenes</Typography>
                     <form onSubmit={handleSubmit}>
                       <TextField
                         value={prompt}
@@ -171,34 +201,72 @@ const ImgProcessing: React.FC = () => {
                         required
                       />
                       <Stack
-                        sx={{ pt: 1 }}
+                        sx={{ pt: 2 }}
                         direction="row"
                         spacing={2}
                         justifyContent="start"
                       >
-                        <Button variant="contained" type="submit">
+                        <Button
+                          endIcon={<ChatIcon />}
+                          onClick={handleSubmit}
+                          sx={{
+                            color: "secondary.main",
+                            px: "1.2vw",
+                            borderRadius: 3,
+                            border: "1px solid #EF8D6E",
+                            "&:hover": {
+                              backgroundColor: "secondary.main",
+                              color: "text.secondary",
+                            },
+                          }}
+                        >
                           Generar
                         </Button>
-                        <Button variant="contained" onClick={handleClear}>
+                        <Button
+                          onClick={handleClear}
+                          sx={{
+                            color: "secondary.main",
+                            px: "1.2vw",
+                            borderRadius: 3,
+                            border: "1px solid #EF8D6E",
+                            "&:hover": {
+                              backgroundColor: "secondary.main",
+                              color: "text.secondary",
+                            },
+                          }}
+                        >
                           Limpiar
                         </Button>
-                        <Button variant="contained" onClick={handleShare}>
+                        <Button
+                          onClick={handleShare}
+                          sx={{
+                            color: "secondary.main",
+                            px: "1.2vw",
+                            borderRadius: 3,
+                            border: "1px solid #EF8D6E",
+                            "&:hover": {
+                              backgroundColor: "secondary.main",
+                              color: "text.secondary",
+                            },
+                          }}
+                        >
                           compartir
                         </Button>
                       </Stack>
                     </form>
-                    <Alert severity="info" sx={{ m: 1 }}>
+                  
+                  </Box>
+                  <Alert severity="info"  sx={{ mt:5, mr:2.5, backgroundColor:"text.primary", color: "text.secondary" }}>
                       <strong>Cuidado:</strong> Si vuelves a generar una imagen
                       se borrara la anterior para siempre, inicia sesion para
                       compartirla antes de que esto pase.
                     </Alert>
-                  </Box>
                 </Grid>
                 <Grid item xs={12} md={6}>
                   <Box
                     borderRadius={2}
                     border={2}
-                    borderColor="primary.main"
+                    borderColor="text.primary"
                     display="flex"
                     height="100%"
                     width="100%"

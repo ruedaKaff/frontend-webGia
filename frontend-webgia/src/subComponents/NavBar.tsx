@@ -18,10 +18,13 @@ import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import Menu from "@mui/material/Menu";
 import LogoutIcon from "@mui/icons-material/Logout";
 import LogingIcon from "@mui/icons-material/Login";
-import ExploreIcon from "@mui/icons-material/Explore";
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import PublicIcon from '@mui/icons-material/Public';
+
 import EditIcon from "@mui/icons-material/Edit";
 import Hidden from "@mui/material/Hidden";
 import MenuItem from "@mui/material/MenuItem";
+import communityBanner from "../assets/communityBanner.jpg";
 
 const NavBar: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -67,7 +70,19 @@ const NavBar: React.FC = () => {
     <AppBar position="sticky" sx={{ bgcolor: "background.default" }}>
       <Toolbar>
         <Box
-          sx={{ pt: 2, pb: 2, mx: { xs: 2, sm: 5, md: 17 } }}
+          sx={{ pt: 2, pb: 2, mx: { xs: 2, sm: 5, md: 17 },
+          "&::before": {
+            content: '""',
+            position: "absolute",
+            top: 0,
+            right: 0,
+            bottom: 0,
+            left: 0,
+            backgroundImage: `url(${communityBanner})`,
+            opacity: 0.1,
+            zIndex: -1,
+            transform: 'scaleX(-1)', // Add this line
+          }, }}
           display="flex"
           flexDirection="row"
           justifyContent="space-between"
@@ -111,7 +126,7 @@ const NavBar: React.FC = () => {
           >
             <RouterLink to="/community">
               <Button
-                endIcon={<ExploreIcon />}
+                endIcon={<VisibilityIcon />}
                 sx={{
                   bgcolor: "secondary.main",
                   px: "1.2vw",

@@ -44,19 +44,31 @@ const CommunityCard: React.FC<CommunityData> = ({
       }
     />
     <CardContent sx={{ flexGrow: 1 }}>
-      <Typography gutterBottom variant="h5" component="h2" >
+      <Typography gutterBottom variant="h5" component="h2">
         {capitalizeFirstLetter(input)}
       </Typography>
-      <Typography variant="body1" >{capitalizeFirstLetter(username)}</Typography>
-      <Typography variant="body2" color="#393E46" >
+      <Typography variant="body1">{capitalizeFirstLetter(username)}</Typography>
+      <Typography variant="body2" color="#393E46">
         {capitalizeFirstLetter(model_type)}
       </Typography>
     </CardContent>
 
     <CardActions sx={{ justifyContent: "space-between" }}>
       <Typography variant="inherit">{email}</Typography>
-      <Button variant="outlined" size="small">
-        View
+      <Button
+        sx={{
+          color: "secondary.main",
+          px: "1.2vw",
+          borderRadius: 3,
+          border: "1px solid #EF8D6E",
+          "&:hover": {
+            backgroundColor: "secondary.main",
+            color: "text.secondary",
+          },
+        }}
+        size="small"
+      >
+        Ver
       </Button>
     </CardActions>
   </Card>

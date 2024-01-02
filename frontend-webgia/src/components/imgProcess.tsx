@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useState } from "react";
+import { useState, MouseEvent } from "react";
 import Typography from "@mui/material/Typography";
 import NavBar from "../subComponents/NavBar";
 import theme from "../theme/style";
@@ -11,31 +11,44 @@ import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import axios from "axios";
 import TextField from "@mui/material/TextField";
-import { Grid } from "@mui/material";
-import { CircularProgress } from "@mui/material";
-import { Alert } from "@mui/material";
+import { Grid, Slider, CircularProgress, Alert } from "@mui/material";
+
 import { CommunityPost } from "../interfaces/communityPost";
+import { ImageGen } from "../interfaces/imageGen";
 import { useNavigate } from "react-router-dom";
 import ChatIcon from "@mui/icons-material/Chat";
 import img4 from "../assets/img4.jpg";
 
 const ImgProcessing: React.FC = () => {
   const navigate = useNavigate();
-  const [prompt, setPrompt] = useState("");
+  const [prompt, setPrompt] = useState<string>("");
+  const [negativePrompt, setNegativePrompt] = useState<string | undefined>("");
+  const [steps, setSteps] = useState<number | undefined>(25);
+  const [guidance, setGuidance] = useState<number | undefined>(8);
+  const [width, setWidth] = useState<number | undefined>(512);
+  const [height, setHeight] = useState<number | undefined>(512);
   const [image, setImage] = useState("");
   const [image64, setImage64] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPrompt(event.target.value);
-  };
+  const [showAdvancedOptions, setShowAdvancedOptions] = useState(false);
 
   const handleSubmit = async (event: React.FormEvent) => {
+    const imageGen: ImageGen = {
+      prompt,
+      negativePrompt,
+      steps,
+      guidance,
+      width,
+      height,
+    };
+    console.log(imageGen);
+
     event.preventDefault();
     setLoading(true);
     const response = await axios.post(
       "http://localhost:9090/img_processing/generator",
-      { prompt }
+      { imageGen }
     );
     setImage(`data:image/jpeg;base64,${response.data}`);
     setImage64(response.data);
@@ -52,7 +65,7 @@ const ImgProcessing: React.FC = () => {
       });
 
       if (!User.data.user) {
-        alert("You must be logged in to share an image");
+        alert("Debes ingresar para poder compartir");
         return;
       }
 
@@ -150,7 +163,7 @@ const ImgProcessing: React.FC = () => {
                 continuación, reaccionar ante lo que "ven ".
               </Typography>
               <Stack
-                sx={{ pt:1}}
+                sx={{ pt: 1 }}
                 direction="row"
                 spacing={2}
                 justifyContent="left"
@@ -190,14 +203,19 @@ const ImgProcessing: React.FC = () => {
                   bgcolor="background.default"
                   borderRadius={2}
                 >
-                  <Box>
-                    
-                    <Typography variant="h6" color="text.primary">Generacion de imagenes</Typography>
+                  <Box sx={{mb: 2}}>
+                    <Typography variant="h6" color="text.primary">
+                      Generacion de imagenes
+                    </Typography>
                     <form onSubmit={handleSubmit}>
                       <TextField
+                        label="Describe tu imagen aqui"
                         value={prompt}
-                        onChange={handleChange}
+                        onChange={(e) => setPrompt(e.target.value)}
                         sx={{ width: "96%" }}
+                        InputLabelProps={{
+                          style: { color: "#B2A59B" },
+                        }}
                         required
                       />
                       <Stack
@@ -238,6 +256,25 @@ const ImgProcessing: React.FC = () => {
                           Limpiar
                         </Button>
                         <Button
+                          sx={{
+                            bgcolor: "secondary.main",
+                            px: "1.2vw",
+                            borderRadius: 3,
+                            color: "text.secondary",
+                            "&:hover": {
+                              backgroundColor: "#CD5C08",
+                            },
+                          }}
+                          aria-controls="avancedOptions-menu"
+                          aria-haspopup="true"
+                          onClick={() =>
+                            setShowAdvancedOptions(!showAdvancedOptions)
+                          }
+                        >
+                          Opciones Avanzadas
+                        </Button>
+
+                        <Button
                           onClick={handleShare}
                           sx={{
                             color: "secondary.main",
@@ -254,13 +291,96 @@ const ImgProcessing: React.FC = () => {
                         </Button>
                       </Stack>
                     </form>
-                  
                   </Box>
-                  <Alert severity="info"  sx={{ mt:5, mr:2.5, backgroundColor:"text.primary", color: "text.secondary" }}>
-                      <strong>Cuidado:</strong> Si vuelves a generar una imagen
-                      se borrara la anterior para siempre, inicia sesion para
-                      compartirla antes de que esto pase.
-                    </Alert>
+
+                  {showAdvancedOptions && (
+                    <Box 
+                    
+                    >
+                      <TextField
+                        sx={{ color: "text.primary", width: "96%" }}
+                        InputLabelProps={{
+                          style: { color: "#B2A59B" },
+                        }}
+                        label="Algo que quieras evitar en la imagen"
+                        value={negativePrompt}
+                        onChange={(e) => setNegativePrompt(e.target.value)}
+                      />
+
+                      <Typography variant="caption">
+                        Pasos de inferencia{" "}
+                      </Typography>
+
+                      <Slider
+                        sx={{ width: "96%", color: "secondary.main" }}
+                        defaultValue={25}
+                        onChange={(e, value) => setSteps(value as number)}
+                        aria-labelledby="discrete-slider"
+                        valueLabelDisplay="auto"
+                        step={5}
+                        marks
+                        min={0}
+                        max={100}
+                      />
+
+                      <Typography variant="caption">
+                        Escala orientativa{" "}
+                      </Typography>
+
+                      <Slider
+                        sx={{ width: "96%", color: "secondary.main" }}
+                        defaultValue={8.1}
+                        onChange={(e, value) => setGuidance(value as GLfloat)}
+                        aria-labelledby="discrete-slider"
+                        valueLabelDisplay="auto"
+                        step={0.1}
+                        marks
+                        min={0}
+                        max={20}
+                      />
+
+                      <Typography variant="caption">Alto </Typography>
+
+                      <Slider
+                        sx={{ width: "96%", color: "secondary.main" }}
+                        defaultValue={512}
+                        onChange={(e, value) => setWidth(value as number)}
+                        aria-labelledby="discrete-slider"
+                        valueLabelDisplay="auto"
+                        step={200}
+                        marks
+                        min={400}
+                        max={800}
+                      />
+
+                      <Typography variant="caption">Ancho </Typography>
+
+                      <Slider
+                        sx={{ width: "96%", color: "secondary.main" }}
+                        defaultValue={512}
+                        onChange={(e, value) => setHeight(value as number)}
+                        aria-labelledby="discrete-slider"
+                        valueLabelDisplay="auto"
+                        step={200}
+                        marks
+                        min={400}
+                        max={600}
+                      />
+                    </Box>
+                  )}
+                  <Alert
+                    severity="info"
+                    sx={{
+                      mt: 5,
+                      mr: 2.5,
+                      backgroundColor: "text.primary",
+                      color: "text.secondary",
+                    }}
+                  >
+                    <strong>Cuidado:</strong> Si vuelves a generar una imagen se
+                    borrara la anterior para siempre, inicia sesion para
+                    compartirla antes de que esto pase.
+                  </Alert>
                 </Grid>
                 <Grid item xs={12} md={6}>
                   <Box

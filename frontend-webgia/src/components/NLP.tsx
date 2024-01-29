@@ -41,12 +41,10 @@ const NLP: React.FC = () => {
               <Typography
                 variant="inherit"
                 align="center"
-                color="text.secondary"
+                color="text.primary"
                 paragraph
               >
-                Something short and leading about the collection below—its
-                contents, the creator, etc. Make it short and sweet, but not too
-                short.
+               Comming soon ...
               </Typography>
               <Stack
                 sx={{ pt: 4 }}
@@ -54,8 +52,7 @@ const NLP: React.FC = () => {
                 spacing={2}
                 justifyContent="center"
               >
-                <Button variant="contained">Comparte tus creaciones</Button>
-                <Button variant="outlined">Prueba + IA</Button>
+             
               </Stack>
             </Container>
           </Box>

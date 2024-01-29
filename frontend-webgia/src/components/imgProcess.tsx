@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useState, MouseEvent } from "react";
+import { useState } from "react";
 import Typography from "@mui/material/Typography";
 import NavBar from "../subComponents/NavBar";
 import theme from "../theme/style";
@@ -19,6 +19,7 @@ import { useNavigate } from "react-router-dom";
 import ChatIcon from "@mui/icons-material/Chat";
 import img4 from "../assets/img4.jpg";
 
+
 const ImgProcessing: React.FC = () => {
   const navigate = useNavigate();
   const [prompt, setPrompt] = useState<string>("");
@@ -33,6 +34,8 @@ const ImgProcessing: React.FC = () => {
 
   const [showAdvancedOptions, setShowAdvancedOptions] = useState(false);
 
+  const url = `${process.env.REACT_APP_BACKEND_URL}`;
+
   const handleSubmit = async (event: React.FormEvent) => {
     const imageGen: ImageGen = {
       prompt,
@@ -42,25 +45,27 @@ const ImgProcessing: React.FC = () => {
       width,
       height,
     };
-    console.log(imageGen);
+   
 
     event.preventDefault();
     setLoading(true);
     const response = await axios.post(
-      "http://localhost:9090/img_processing/generator",
+      `${url}/img_processing/generator`,
       { imageGen }
     );
     setImage(`data:image/jpeg;base64,${response.data}`);
     setImage64(response.data);
     setLoading(false);
+
+    
   };
 
   ////////share image
   const handleShare = async () => {
     try {
-      console.log("checking http://localhost:9090/community ");
+      
 
-      const User = await axios.get("http://localhost:9090/login/auth/session", {
+      const User = await axios.get(`${url}/login/auth/session`, {
         withCredentials: true,
       });
 
@@ -86,17 +91,17 @@ const ImgProcessing: React.FC = () => {
         username: name,
       };
 
-      const response = await axios.post(
-        "http://localhost:9090/community",
+      const response = await axios.post(`${url}/community`,
         postData,
         {
           withCredentials: true,
         }
       );
-
+    if (response) {
       navigate("/community");
+    }
     } catch (error) {
-      console.error("An error occurred while sharing the image", error);
+    
     }
   };
 
@@ -169,6 +174,7 @@ const ImgProcessing: React.FC = () => {
                 justifyContent="left"
               >
                 <Button
+                  href="https://huggingface.co/tasks"
                   sx={{
                     bgcolor: "secondary.main",
                     px: "1.2vw",
@@ -203,7 +209,7 @@ const ImgProcessing: React.FC = () => {
                   bgcolor="background.default"
                   borderRadius={2}
                 >
-                  <Box sx={{mb: 2}}>
+                  <Box sx={{ mb: 2 }}>
                     <Typography variant="h6" color="text.primary">
                       Generacion de imagenes
                     </Typography>
@@ -294,9 +300,7 @@ const ImgProcessing: React.FC = () => {
                   </Box>
 
                   {showAdvancedOptions && (
-                    <Box 
-                    
-                    >
+                    <Box>
                       <TextField
                         sx={{ color: "text.primary", width: "96%" }}
                         InputLabelProps={{

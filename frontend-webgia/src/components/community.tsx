@@ -16,7 +16,6 @@ import communityBanner from "../assets/communityBanner.jpg";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 
-
 import PsychologyIcon from "@mui/icons-material/Psychology";
 import theme from "../theme/style";
 import { ThemeProvider } from "@mui/material/styles";
@@ -29,21 +28,24 @@ const Community: React.FC = () => {
   const [communityData, setCommunityData] = useState<CommunityData[]>([]);
   const [page, setPage] = useState(1);
   const itemsPerPage = 6;
+  const url = `${process.env.REACT_APP_BACKEND_URL}/community`;
+
 
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
-    window.scrollTo({ top: 305, behavior: 'smooth' });
+    window.scrollTo({ top: 305, behavior: "smooth" });
   };
 
   useEffect(() => {
     axios
-      .get<CommunityData[]>("http://localhost:9090/community")
+      .get<CommunityData[]>(`${url}`)
       .then((response) => {
         const sortedData = [...response.data].sort(
           (a, b) =>
             new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()
         );
         setCommunityData(sortedData);
+      
       })
       .catch((error) => {
         console.error("There was an error!", error);
@@ -52,7 +54,7 @@ const Community: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    console.log();
+  
   }, []);
   return (
     <ThemeProvider theme={theme}>
@@ -96,7 +98,7 @@ const Community: React.FC = () => {
                 backgroundRepeat: "no-repeat",
                 backgroundImage: `url(${communityBanner})`,
                 opacity: 0.1,
-                
+
                 zIndex: -1,
               },
             }}
@@ -126,7 +128,7 @@ const Community: React.FC = () => {
                 forma parte de esta sección!
               </Typography>
               <Stack
-                sx={{  }}
+                sx={{}}
                 direction="row"
                 spacing={1}
                 justifyContent="center"
@@ -166,14 +168,13 @@ const Community: React.FC = () => {
                 ))}
             </Grid>
             <Box sx={{ display: "flex", justifyContent: "center" }}>
-            <Pagination
-              count={Math.ceil(communityData.length / itemsPerPage)}
-              page={page}
-              onChange={handleChange}
-              sx={{ mt: 3 }}
-            />
+              <Pagination
+                count={Math.ceil(communityData.length / itemsPerPage)}
+                page={page}
+                onChange={handleChange}
+                sx={{ mt: 3 }}
+              />
             </Box>
-            
           </Container>
         </main>
       </div>

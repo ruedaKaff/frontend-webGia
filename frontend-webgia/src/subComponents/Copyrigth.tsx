@@ -6,7 +6,6 @@ import Grid from "@mui/material/Grid";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import GitHubIcon from "@mui/icons-material/GitHub";
 
-
 function CopyText() {
   return (
     <Typography variant="subtitle2" align="left" color="text.primary">
@@ -26,7 +25,11 @@ function CopyText1() {
       <Link color="text.primary" href="https://www.linkedin.com/in/ruedakaf/">
         <LinkedInIcon />
       </Link>
-      <Link sx={{ml:2}} color="text.primary" href="https://github.com/ruedaKaff">
+      <Link
+        sx={{ ml: 2 }}
+        color="text.primary"
+        href="https://github.com/ruedaKaff"
+      >
         <GitHubIcon />
       </Link>
     </Typography>
@@ -36,11 +39,16 @@ function CopyText1() {
 const copyright: React.FC = () => {
   return (
     <Box
-      sx={{ bgcolor: "background.default", p: 2, mx: { xs: 2, sm: 20 }, mt: 0.5 }}
-      maxWidth="lg"
+      sx={{
+        background: " rgba(253, 245, 237,0.5)",
+        p: 2,
+        mx: { xs: 2, sm: 20 },
+        mt: 0.5,
+      }}
       component="footer"
+      alignSelf="center"
     >
-      <Grid container  justifyContent="space-between">
+      <Grid container justifyContent="space-between">
         <CopyText />
         <CopyText1 />
       </Grid>

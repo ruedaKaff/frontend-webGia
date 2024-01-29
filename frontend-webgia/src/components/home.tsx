@@ -25,6 +25,7 @@ const Home: React.FC = () => {
   const link = `https://newsdata.io/api/1/news?apikey=${api_key}&q=IA%20generative&language=es&category=science,technology,top`;
   const [requestCount, setRequestCount] = useState(0);
   const [statusCode, setStatusCode] = useState<number | null>(null);
+  
   useEffect(() => {
     const fetchNewsData = async () => {
       try {
@@ -56,7 +57,12 @@ const Home: React.FC = () => {
   return (
     <ThemeProvider theme={theme}>
       <div
-        style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}
+        style={{
+          display: "flex",
+          flexDirection: "column",
+
+          justifyContent: "space-between",
+        }}
       >
         <NavBar />
         <main>
@@ -115,16 +121,17 @@ const Home: React.FC = () => {
               sx={{
                 pt: 0.5,
                 mt: { xs: 1, sm: 2 },
-                width: "100%",
+                
+                width: {sm:" 100% "},
                 overflowX: { xs: "scroll", sm: "visible" },
                 scrollbarWidth: { xs: "thin", sm: "none" },
                 "&::-webkit-scrollbar": {
-                  width: { xs: "6px", sm: "0px" },
+                  width: { xs: "6px", sm: "6px" },
                 },
               }}
               direction="row"
               justifyContent={{ xs: "flex-start", sm: "center" }}
-              spacing={3.5}
+              spacing={2.5}
             >
               <RouterLink to="/NLP">
                 <Box
@@ -133,7 +140,7 @@ const Home: React.FC = () => {
                     backgroundSize: "376px 276px",
 
                     width: { xs: "276px", sm: "376px" },
-                    minWidth: "276px",
+                   
                     borderRadius: 3,
                     p: 0.5,
                     color: "text.secondary",
@@ -193,7 +200,7 @@ const Home: React.FC = () => {
                     backgroundSize: "376px 276px",
                     backgroundRepeat: "no-repeat",
                     width: { xs: "276px", sm: "376px" },
-                    minWidth: "276px",
+               
                     borderRadius: 3,
                     p: 0.5,
                     color: "text.secondary",
@@ -253,7 +260,7 @@ const Home: React.FC = () => {
                     backgroundSize: "376px 276px",
                     backgroundRepeat: "no-repeat",
                     width: { xs: "276px", sm: "376px" },
-                    minWidth: "276px",
+                  
                     borderRadius: 3,
                     p: 0.5,
                     color: "text.secondary",
@@ -312,13 +319,15 @@ const Home: React.FC = () => {
             sx={{
               mt: { xs: 1, sm: 2 },
               pt: { xs: 4, sm: 4 },
-              pb: { xs: 5, sm: 4 },
+              pb: { xs: 5, sm: 1 },
               mx: { xs: 2, sm: 20 },
               borderRadius: 1,
+              background:
+                "linear-gradient(to bottom, rgba(253, 245, 237,0.8), rgba(255, 0, 0, 0))",
             }}
             display={{ xs: "block", sm: "flex" }}
             alignItems="flex-start"
-            justifyContent={{ xs: "center", sm: "flex-start" }}
+            justifyContent={{ xs: "center", sm: "center" }}
             flexDirection="row"
             flexGrow={1}
           >
@@ -336,8 +345,8 @@ const Home: React.FC = () => {
               <Container sx={{ width: "230px", p: 1, m: 1, my: { xs: 10 } }}>
                 <Typography
                   variant="h3"
-                  align="left"
                   color="text.primary"
+                  fontWeight="bold"
                   gutterBottom
                 >
                   Noticias
@@ -351,37 +360,38 @@ const Home: React.FC = () => {
                     gutterBottom
                     sx={{ ml: 0.5 }}
                   >
-                    Informate acerca las ultimas noticias sobre IA 
+                    Informate acerca las ultimas noticias sobre IA
                   </Typography>
                 </Hidden>
               </Container>
             </Box>
             {statusCode === 429 ? (
-                <Typography align="center">Regresa despues para seguir leyendo</Typography>
-              ) : (
-            <Box
-              display={{ xs: "block", sm: "flex" }}
-              sx={{
-                mt: { xs: 1, sm: 2 },
-                display: "flex",
-                flexDirection: "row",
-                overflowX: "auto",
-                width: { xs: "900px", sm: "900px" }, // Set a specific width for the container
-                "&::-webkit-scrollbar": {
-                  height: "8px",
-                },
-                "&::-webkit-scrollbar-track": {
-                  boxShadow: "inset 0 0 5px grey",
-                  borderRadius: "4px",
-                },
-                "&::-webkit-scrollbar-thumb": {
-                  background: "#EF8D6E",
-                  borderRadius: "4px",
-                },
-              }}
-            >
-           
-                <Stack direction="row" spacing={2}>
+              <Typography align="center">
+                Regresa despues para seguir leyendo
+              </Typography>
+            ) : (
+              <Box
+                display={{ xs: "block", sm: "flex" }}
+                sx={{
+                  mt: { xs: 1, sm: 2 },
+                  display: "flex",
+                  flexDirection: "row",
+                  overflowX: "auto",
+                  width: { xs: "350px", sm: "900px" },
+                  "&::-webkit-scrollbar": {
+                    height: "8px",
+                  },
+                  "&::-webkit-scrollbar-track": {
+                    boxShadow: "inset 0 0 2px grey",
+                    borderRadius: "4px",
+                  },
+                  "&::-webkit-scrollbar-thumb": {
+                    background: "#EF8D6E",
+                    borderRadius: "4px",
+                  },
+                }}
+              >
+                <Stack direction="row" spacing={3}>
                   {newsData.map((newsItem) => (
                     <Card
                       key={newsItem.article_id}
@@ -445,8 +455,7 @@ const Home: React.FC = () => {
                     </Card>
                   ))}
                 </Stack>
-              
-            </Box>
+              </Box>
             )}
           </Box>
         </main>
@@ -455,7 +464,7 @@ const Home: React.FC = () => {
 
         {/* End footer */}
       </div>
-      <Box component="footer">
+      <Box  component="footer">
         <Copyright />
       </Box>
     </ThemeProvider>
